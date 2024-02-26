@@ -7,6 +7,7 @@ class Result(BaseModel):
     date_taken: Optional[str]
 
 class User(BaseModel):
+    user_id: str
     user_type: str
     test: int
     username: str

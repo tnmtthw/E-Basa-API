@@ -5,11 +5,13 @@ from models.user import Result, User, LoginRequest
 from database.connection import users_collection, authenticate_user
 from bson import ObjectId
 from fastapi.responses import JSONResponse
+from typing import List
 
 router = APIRouter()
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
+# POST
 @router.post("/register/")
 def register_post(user: User):
     user_exist = users_collection.find_one({"username": user.username})
@@ -42,3 +44,25 @@ async def add_posttest_result(user_id: str, result: Result):
     user_object_id = ObjectId(user_id)
     users_collection.update_one({"_id": user_object_id}, {"$push": {"posttest_results": result.dict()}})
     return JSONResponse(content={"message": "Posttest result added successfully"})
+
+# GET
+
+@router.get("/users/", response_model=List[User])
+async def get_users():
+    users = []
+    for user in users_collection.find({}):
+        user['_id'] = str(user['_id'])  # Convert _id to string
+        user['user_id'] = user.pop('_id')  # Rename _id to user_id
+        users.append(user)
+    return users
+
+@router.get("/users/{id}", response_model=User)
+async def get_user(id: str):
+    object_id = ObjectId(id)
+    user = users_collection.find_one({"_id": object_id})
+    if user:
+        user['_id'] = str(user['_id'])  # Convert _id to string
+        user['user_id'] = user.pop('_id')  # Rename _id to user_id
+        return user
+    else:
+        raise HTTPException(status_code=404, detail="User not found")
