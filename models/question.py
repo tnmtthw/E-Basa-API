@@ -15,8 +15,9 @@ class Kulay(BaseModel):
     
 class Numero(BaseModel):
     question_text: str
-    options: List[str]
+    options: Optional[List[str]]
     correct_option_index: int
+    question_image: Optional[str]
     
 class Binasa(BaseModel):
     question_text: str
