@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import List
+from typing import List, Optional
 
 class Hugis(BaseModel):
     question_text: str
@@ -8,7 +8,9 @@ class Hugis(BaseModel):
 
 class Kulay(BaseModel):
     question_text: str
-    options: List[str]
+    question_image: Optional[str]
+    options: Optional[List[str]]
+    option_images: Optional[List[str]]
     correct_option_index: int
     
 class Numero(BaseModel):
