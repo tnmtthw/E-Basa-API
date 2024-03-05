@@ -66,3 +66,12 @@ async def get_user(id: str):
         return user
     else:
         raise HTTPException(status_code=404, detail="User not found")
+
+@router.delete("/users/{user_id}")
+async def delete_user(user_id: str):
+    object_id = ObjectId(user_id)
+    deletion_result = users_collection.delete_one({"_id": object_id})
+    if deletion_result.deleted_count == 1:
+        return {"message": "User deleted successfully"}
+    else:
+        raise HTTPException(status_code=404, detail="User not found")
