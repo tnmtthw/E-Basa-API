@@ -1,25 +1,20 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter
 import random
 from typing import List
-from models.question import Hugis, Kulay, Numero, Binasa, Napakinggan, Ponolohiya, Talasalitaan, Gramatika
-from database.connection import hugis_collection, kulay_collection, numero_collection, binasa_collection, napakinggan_collection, ponolohiya_collection, talasalitaan__collection, gramatika__collection
+from models.question import PreTest
+from database.connection import pretest_collection
 
 router = APIRouter()
 
-@router.get("/hugis", response_model=List[Hugis])
-async def get_hugis():
-    hugis = list(hugis_collection.find({}, {"_id": 0}))
-    return hugis
-
-@router.get("/kulay", response_model=List[Kulay])
-async def get_kulay():
-    kulay = list(kulay_collection.find({}, {"_id": 0}))
+@router.get("/pretest", response_model=List[PreTest])
+async def get_pretest():
+    pretest_questions = list(pretest_collection.find({}, {"_id": 0}))
     
     # Shuffle the questions
-    random.shuffle(kulay)
+    random.shuffle(pretest_questions)
     
     # Randomize options and option_images for each question
-    for question in kulay:
+    for question in pretest_questions:
         options = question["options"]
         option_images = question["option_images"]
         correct_index = question["correct_option_index"]
@@ -48,14 +43,4 @@ async def get_kulay():
         question["options"] = [options[i] for i in indices[:4]]
         question["option_images"] = [option_images[i] for i in indices[:4]]
     
-    return kulay
-
-# @router.get("/kulay", response_model=List[Kulay])
-# async def get_kulay():
-#     kulay = list(kulay_collection.find({}, {"_id": 0}))
-#     return kulay
-
-@router.get("/numero", response_model=List[Numero])
-async def get_numero():
-    numero = list(numero_collection.find({}, {"_id": 0}))
-    return numero
+    return pretest_questions
