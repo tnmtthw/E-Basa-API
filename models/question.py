@@ -5,6 +5,7 @@ class PreTest(BaseModel):
     category: str
     question_text: str
     question_image: Optional[str]
+    question_sound: Optional[str]
     options: Optional[List[str]]
     option_images: Optional[List[str]]
     correct_option_index: int
