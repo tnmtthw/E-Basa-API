@@ -75,3 +75,14 @@ async def delete_user(user_id: str):
         return {"message": "User deleted successfully"}
     else:
         raise HTTPException(status_code=404, detail="User not found")
+    # PUT
+@router.put("/users/{user_id}")
+async def update_user(user_id: str, updated_user_data: User):
+    object_id = ObjectId(user_id)
+    user_exist = users_collection.find_one({"_id": object_id})
+    if user_exist:
+        updated_user_dict = updated_user_data.dict(exclude_unset=True)
+        users_collection.update_one({"_id": object_id}, {"$set": updated_user_dict})
+        return {"message": "User updated successfully"}
+    else:
+        raise HTTPException(status_code=404, detail="User not found")
