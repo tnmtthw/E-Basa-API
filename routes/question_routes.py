@@ -44,3 +44,17 @@ async def get_pretest():
         question["option_images"] = [option_images[i] for i in indices[:4]]
     
     return pretest_questions
+
+@router.get("/pretest/question", response_model=List[PreTest])
+async def get_pretest():
+    pretest_questions = list(pretest_collection.find({}, {"_id": 0}))
+    return pretest_questions
+
+@router.post("/pretest/question", response_model=str)
+async def update_pretest(questions: List[PreTest]):
+    try:
+        for question in questions:
+            pretest_collection.update_one({"id": question.id}, {"$set": question.dict()})
+        return "Questions updated successfully."
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
