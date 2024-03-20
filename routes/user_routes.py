@@ -1,7 +1,7 @@
 from pymongo import MongoClient
 from fastapi import APIRouter, HTTPException
 from fastapi.security import OAuth2PasswordBearer
-from models.user import Result, User, LoginRequest
+from models.user import Result, User, UserUpdate, LoginRequest
 from database.connection import users_collection, authenticate_user
 from bson import ObjectId
 from fastapi.responses import JSONResponse
@@ -75,9 +75,10 @@ async def delete_user(user_id: str):
         return {"message": "User deleted successfully"}
     else:
         raise HTTPException(status_code=404, detail="User not found")
-    # PUT
+    
+# PUT
 @router.put("/users/{user_id}")
-async def update_user(user_id: str, updated_user_data: User):
+async def update_user(user_id: str, updated_user_data: UserUpdate):
     object_id = ObjectId(user_id)
     user_exist = users_collection.find_one({"_id": object_id})
     if user_exist:
