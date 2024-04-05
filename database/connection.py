@@ -5,7 +5,7 @@ client = MongoClient('mongodb+srv://admin:admin@cluster0.fosjyo8.mongodb.net/?re
 
 # Define the databases and collections
 users_collection = client['e-basa_db']['users']
-pretest_collection = client['question']['pretest']
+pretest_collection = client['question']['pretest_01']
 
 
 def authenticate_user(username, password):

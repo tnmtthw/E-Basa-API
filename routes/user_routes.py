@@ -82,7 +82,7 @@ async def update_user(user_id: str, updated_user_data: UserUpdate):
     object_id = ObjectId(user_id)
     user_exist = users_collection.find_one({"_id": object_id})
     if user_exist:
-        updated_user_dict = updated_user_data.dict(exclude_unset=True)
+        updated_user_dict = updated_user_data.model_dump(exclude_unset=True)
         users_collection.update_one({"_id": object_id}, {"$set": updated_user_dict})
         return {"message": "User updated successfully"}
     else:

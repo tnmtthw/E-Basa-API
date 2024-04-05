@@ -1,12 +1,15 @@
 from fastapi import APIRouter
 import random
+from fastapi import APIRouter, HTTPException
 from typing import List
-from models.question import PreTest
+from models.question import Pretest, PretestUpdate
+from bson import ObjectId
 from database.connection import pretest_collection
+
 
 router = APIRouter()
 
-@router.get("/pretest", response_model=List[PreTest])
+@router.get("/pretest", response_model=List[Pretest])
 async def get_pretest():
     pretest_questions = list(pretest_collection.find({}, {"_id": 0}))
     
@@ -45,35 +48,38 @@ async def get_pretest():
     
     return pretest_questions
 
-@router.get("/question/pretest", response_model=List[PreTest])
+
+@router.get("/question/pretest/", response_model=List[Pretest])
 async def get_pretest():
-    pretest_questions = list(pretest_collection.find({}, {"_id": 0}))
-    return pretest_questions
+    pretest_list = [] 
+    for pretest in pretest_collection.find({}):
+        pretest['_id'] = str(pretest['_id'])
+        pretest['pretest_id'] = pretest.pop('_id')
+        pretest_list.append(pretest)
+    return pretest_list
 
-from typing import Optional
 
-@router.put("/question/pretest/{question_id}", response_model=PreTest)
-async def update_pretest_question(question_id: str, updated_fields: dict):
-    # Convert question_id to ObjectId
-    object_id = ObjectId(question_id)
-    
-    # Check if the question exists in the collection
-    question_exist = pretest_collection.find_one({"_id": object_id})
-    
-    if question_exist:
-        # Formulate update query based on provided fields
-        update_query = {"$set": {}}
-        for field, value in updated_fields.items():
-            update_query["$set"][field] = value
-
-        # Update the question in the database with the provided question_id
-        result = pretest_collection.update_one({"_id": object_id}, update_query)
-        
-        if result.modified_count == 1:
-            # Retrieve the updated question with the actual _id
-            updated_question = pretest_collection.find_one({"_id": object_id})
-            return updated_question
-        else:
-            raise HTTPException(status_code=500, detail="Failed to update question")
+@router.get("/question/pretest/{id}", response_model=Pretest)
+async def get_user(id: str):
+    object_id = ObjectId(id)
+    pretest = pretest_collection.find_one({"_id": object_id})
+    if pretest:
+        pretest['_id'] = str(pretest['_id'])
+        pretest['pretest_id'] = pretest.pop('_id')
+        return pretest
     else:
         raise HTTPException(status_code=404, detail="Question not found")
+    
+#PUT
+@router.put("/question/pretest/{pretest_id}")
+async def update_pretest(pretest_id: str, updated_pretest_data: PretestUpdate):
+    object_id = ObjectId(pretest_id)
+    pretest_exist = pretest_collection.find_one({"_id": object_id})
+    if pretest_exist:
+        updated_pretest_dict = updated_pretest_data.dict(exclude_unset=True)
+        if updated_pretest_dict.get('options') is not None:
+            updated_pretest_dict['options'] = updated_pretest_data.options  # Update options separately
+        pretest_collection.update_one({"_id": object_id}, {"$set": updated_pretest_dict})
+        return {"message": "Pretest updated successfully"}
+    else:
+        raise HTTPException(status_code=404, detail="Pretest not found")
