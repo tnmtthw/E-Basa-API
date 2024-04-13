@@ -6,31 +6,41 @@ class Result(BaseModel):
     score: Optional[float]
     
 class User(BaseModel):
-    user_id: str
-    user_type: str
+    userId: str
+    userType: str
     test: int
+    avatar: str
+    firstName: str
+    lastName: str
+    middleName: str
     username: str
-    firstname: str
-    lastname: str
-    middle_initial: str
-    age: int
-    email: str
     gender: str
-    school: str
-    password: str
+    birthdate: str
+    houseNumber: str
+    street: str
+    sps: str
+    barangay: str
+    municipality: str
+    fatherName: Optional[str]
+    fatherNumber: str
+    motherName: str
+    motherNumber: str
+    guardianName: str
+    guardianNumber: str
+    email: str
     pretest_results: List[Result] = []
     posttest_results: List[Result] = []
     
 class UserUpdate(BaseModel):
     username: Optional[str] = None
-    firstname: Optional[str] = None
-    lastname: Optional[str] = None
-    middle_initial: Optional[str] = None
-    age: Optional[int] = None
-    email: Optional[str] = None
-    gender: Optional[str] = None
-    school: Optional[str] = None
-    password: Optional[str] = None
+    firstName: Optional[str] = None
+    lastName: Optional[str] = None
+    middleInitial: Optional[str] = None
+    gender: Optional[int] = None
+    birthdate: Optional[str] = None
+    street: Optional[str] = None
+    municipality: Optional[str] = None
+    province: Optional[str] = None
 
 class LoginRequest(BaseModel):
     username: str

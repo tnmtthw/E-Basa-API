@@ -4,7 +4,8 @@ from pymongo import MongoClient
 client = MongoClient('mongodb+srv://admin:admin@cluster0.fosjyo8.mongodb.net/?retryWrites=true&w=majority')
 
 # Define the databases and collections
-users_collection = client['e-basa_db']['users']
+users_collection = client['users']['student']
+users_collection = client['users']['teacher']
 pretest_collection = client['question']['pretest_01']
 
 
