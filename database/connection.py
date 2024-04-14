@@ -9,6 +9,6 @@ teachers_collection = client['users']['teacher']
 pretest_collection = client['question']['pretest_01']
 
 
-def authenticate_user(username, password):
-    user = users_collection.find_one({"username": username, "password": password})
+def authenticate_user(username):
+    user = users_collection.find_one({"username": username})
     return user

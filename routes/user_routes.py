@@ -22,11 +22,21 @@ def register_post(user: User):
     users_collection.insert_one(user_data)
     return {"username": user.username, "userType": user.userType}
 
+# @router.post("/login")
+# def login_post(login_data: LoginRequest):
+#     user = authenticate_user(login_data.username, login_data.password)
+#     if not user:
+#         raise HTTPException(status_code=401, detail="Incorrect username or password")
+    
+#     test_value = user.get("test")
+#     userId_value = str(user.get("_id"))
+
+#     return {"access_token": user['username'], "token_type": "bearer", "test": test_value, "userId": userId_value}
 @router.post("/login")
 def login_post(login_data: LoginRequest):
-    user = authenticate_user(login_data.username, login_data.password)
+    user = authenticate_user(login_data.username)
     if not user:
-        raise HTTPException(status_code=401, detail="Incorrect username or password")
+        raise HTTPException(status_code=401, detail="Incorrect LRN")
     
     test_value = user.get("test")
     userId_value = str(user.get("_id"))
