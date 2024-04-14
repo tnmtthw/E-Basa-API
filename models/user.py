@@ -6,7 +6,7 @@ class Result(BaseModel):
     score: Optional[float]
     
 class User(BaseModel):
-    userId: str
+    userId: Optional[str] = None
     userType: str
     test: int
     avatar: str
@@ -21,7 +21,7 @@ class User(BaseModel):
     sps: str
     barangay: str
     municipality: str
-    fatherName: Optional[str]
+    fatherName: str
     fatherNumber: str
     motherName: str
     motherNumber: str

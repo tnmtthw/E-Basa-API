@@ -5,7 +5,7 @@ client = MongoClient('mongodb+srv://admin:admin@cluster0.fosjyo8.mongodb.net/?re
 
 # Define the databases and collections
 users_collection = client['users']['student']
-users_collection = client['users']['teacher']
+teachers_collection = client['users']['teacher']
 pretest_collection = client['question']['pretest_01']
 
 

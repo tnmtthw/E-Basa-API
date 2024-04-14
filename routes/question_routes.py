@@ -49,7 +49,7 @@ async def get_pretest():
     return pretest_questions
 
 
-@router.get("/question/pretest/", response_model=List[Pretest])
+@router.get("/question/pretest", response_model=List[Pretest])
 async def get_pretest():
     pretest_list = [] 
     for pretest in pretest_collection.find({}):
