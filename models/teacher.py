@@ -12,4 +12,7 @@ class Teacher(BaseModel):
     gender: str
     username: str
     password: str
-    confirmPassword: str
+    
+class LoginRequest(BaseModel):
+    username: str
+    password: str

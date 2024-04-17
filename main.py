@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from routes.user_routes import router as user_routes
 from routes.question_routes import router as question_routes
 from routes.teacher_routes import router as teacher_routes
+from routes.instruction_routes import router as instruction_routes
 
 app = FastAPI()
 
@@ -17,3 +18,4 @@ app.add_middleware(
 app.include_router(user_routes)
 app.include_router(teacher_routes)
 app.include_router(question_routes)
+app.include_router(instruction_routes)
