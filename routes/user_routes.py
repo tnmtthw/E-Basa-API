@@ -1,7 +1,7 @@
 from pymongo import MongoClient
 from fastapi import APIRouter, HTTPException
 from fastapi.security import OAuth2PasswordBearer
-from models.user import Result, User, UserUpdate, LoginRequest
+from models.user import Result, User, LoginRequest
 from database.connection import users_collection, authenticate_user
 from bson import ObjectId
 from fastapi.responses import JSONResponse
