@@ -51,7 +51,7 @@ async def get_teacher(id: str):
         teacher['teacherObjectId'] = teacher.pop('_id')
         return teacher
     else:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException(status_code=404, detail="Teacher account not found")
 
 @router.delete("/deleteTeacherAccount/{teacherObjectId}")
 async def delete_teacher(teacherObjectId: str):
@@ -62,7 +62,7 @@ async def delete_teacher(teacherObjectId: str):
     else:
         raise HTTPException(status_code=404, detail="Teacher account not found")
     
-    # PUT
+# PUT
 @router.put("/getTeacherAccount/{teacherObjectId}")
 async def update_teacher(teacherObjectId: str, updated_user_data: Teacher):
     object_id = ObjectId(teacherObjectId)
