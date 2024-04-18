@@ -87,7 +87,7 @@ async def delete_user(userId: str):
     
 # PUT
 @router.put("/users/{userId}")
-async def update_user(userId: str, updated_user_data: UserUpdate):
+async def update_user(userId: str, updated_user_data: User):
     object_id = ObjectId(userId)
     user_exist = users_collection.find_one({"_id": object_id})
     if user_exist:

@@ -30,17 +30,6 @@ class User(BaseModel):
     email: str
     pretest_results: List[Result] = []
     posttest_results: List[Result] = []
-    
-class UserUpdate(BaseModel):
-    username: Optional[str] = None
-    firstName: Optional[str] = None
-    lastName: Optional[str] = None
-    middleInitial: Optional[str] = None
-    gender: Optional[int] = None
-    birthdate: Optional[str] = None
-    street: Optional[str] = None
-    municipality: Optional[str] = None
-    province: Optional[str] = None
 
 class LoginRequest(BaseModel):
     username: str
