@@ -7,8 +7,13 @@ client = MongoClient('mongodb+srv://admin:admin@cluster0.fosjyo8.mongodb.net/?re
 users_collection = client['users']['student']
 teachers_collection = client['users']['teacher']
 pretest_collection = client['question']['pretest_01']
+instruction_collection = client['instruction']['pretest']
 
 
 def authenticate_user(username):
     user = users_collection.find_one({"username": username})
     return user
+
+def authenticate_teacher(username, password):
+    teacher = teachers_collection.find_one({"username": username, "password": password})
+    return teacher

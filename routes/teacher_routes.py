@@ -34,21 +34,24 @@ def login_teacher_post(login_data: LoginRequest):
 #GET
 @router.get("/getTeacherAccount", response_model=List[Teacher])
 async def get_teacher_list():
-    users = []
-    for user in teachers_collection.find({}):
-        user['_id'] = str(user['_id'])
-        user['teacherObjectId'] = user.pop('_id')
-        users.append(user)
-    return users
+    teachers = []
+    for teacher in teachers_collection.find({}):
+        teacher['_id'] = str(teacher['_id'])
+        teacher['teacherObjectId'] = teacher.pop('_id')
+        teachers.append(teacher)
+    return teachers
 
-@router.get("/getTeacherAccount/{id}", response_model=List[Teacher])
-async def get_teacher():
-    users = []
-    for user in teachers_collection.find({}):
-        user['_id'] = str(user['_id'])
-        user['teacherObjectId'] = user.pop('_id')
-        users.append(user)
-    return users
+
+@router.get("/getTeacherAccount/{id}", response_model=Teacher)
+async def get_teacher(id: str):
+    object_id = ObjectId(id)
+    teacher = teachers_collection.find_one({"_id": object_id})
+    if teacher:
+        teacher['_id'] = str(teacher['_id'])
+        teacher['teacherObjectId'] = teacher.pop('_id')
+        return teacher
+    else:
+        raise HTTPException(status_code=404, detail="User not found")
 
 @router.delete("/deleteTeacherAccount/{teacherObjectId}")
 async def delete_teacher(teacherObjectId: str):
@@ -58,5 +61,17 @@ async def delete_teacher(teacherObjectId: str):
         return {"message": "Teacher account deleted successfully"}
     else:
         raise HTTPException(status_code=404, detail="Teacher account not found")
+    
+    # PUT
+@router.put("/getTeacherAccount/{teacherObjectId}")
+async def update_teacher(teacherObjectId: str, updated_user_data: Teacher):
+    object_id = ObjectId(teacherObjectId)
+    user_exist = teachers_collection.find_one({"_id": object_id})
+    if user_exist:
+        updated_user_dict = updated_user_data.model_dump(exclude_unset=True)
+        teachers_collection.update_one({"_id": object_id}, {"$set": updated_user_dict})
+        return {"message": "Teacher updated successfully"}
+    else:
+        raise HTTPException(status_code=404, detail="User not found")
 
 
