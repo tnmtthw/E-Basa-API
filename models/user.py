@@ -7,6 +7,7 @@ class Result(BaseModel):
     
 class User(BaseModel):
     userId: Optional[str] = None
+    status: str
     userType: str
     test: int
     avatar: str

@@ -31,7 +31,7 @@ def register_post(user: User):
 #     test_value = user.get("test")
 #     userId_value = str(user.get("_id"))
 
-#     return {"access_token": user['username'], "token_type": "bearer", "test": test_value, "userId": userId_value}
+#     return {"access_token": user['username'], "token_type"": test_value, "userId": userId_value}
 @router.post("/login")
 def login_post(login_data: LoginRequest):
     user = authenticate_user(login_data.username)
@@ -75,15 +75,39 @@ async def get_user(id: str):
         return user
     else:
         raise HTTPException(status_code=404, detail="User not found")
-
-@router.delete("/users/{userId}")
-async def delete_user(userId: str):
+    
+@router.put("/users/status/{userId}", response_model=User)
+async def toggle_user_status(userId: str):
     object_id = ObjectId(userId)
-    deletion_result = users_collection.delete_one({"_id": object_id})
-    if deletion_result.deleted_count == 1:
-        return {"message": "User deleted successfully"}
+    user = users_collection.find_one({"_id": object_id})
+
+    if user:
+        current_status = user.get("status")
+
+        if current_status == "Active":
+            new_status = "Inactive"
+        elif current_status == "Inactive":
+            new_status = "Active"
+        else:
+            raise HTTPException(status_code=400, detail="Invalid user status")
+
+        users_collection.update_one({"_id": object_id}, {"$set": {"status": new_status}})
+        user['status'] = new_status
+        user['_id'] = str(user['_id'])
+        user['userId'] = user.pop('_id')
+        return user
     else:
         raise HTTPException(status_code=404, detail="User not found")
+
+
+# @router.delete("/users/{userId}")
+# async def delete_user(userId: str):
+#     object_id = ObjectId(userId)
+#     deletion_result = users_collection.delete_one({"_id": object_id})
+#     if deletion_result.deleted_count == 1:
+#         return {"message": "User deleted successfully"}
+#     else:
+#         raise HTTPException(status_code=404, detail="User not found")
     
 # PUT
 @router.put("/users/{userId}")
