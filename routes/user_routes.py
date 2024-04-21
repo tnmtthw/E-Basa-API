@@ -98,9 +98,6 @@ async def update_user(userId: str, updated_user_data: User):
         return {"message": "User updated successfully"}
     else:
         raise HTTPException(status_code=404, detail="User not found")
-    
-    from bson import ObjectId
-from fastapi import HTTPException
 
 @router.put("/users/test=1/{userId}")
 async def update_user_pretest_status(userId: str):
