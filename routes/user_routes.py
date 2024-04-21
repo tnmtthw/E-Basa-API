@@ -22,25 +22,13 @@ def register_post(user: User):
     users_collection.insert_one(user_data)
     return {"username": user.username, "userType": user.userType}
 
-# @router.post("/login")
-# def login_post(login_data: LoginRequest):
-#     user = authenticate_user(login_data.username, login_data.password)
-#     if not user:
-#         raise HTTPException(status_code=401, detail="Incorrect username or password")
-    
-#     test_value = user.get("test")
-#     userId_value = str(user.get("_id"))
-
-#     return {"access_token": user['username'], "token_type"": test_value, "userId": userId_value}
 @router.post("/login")
 def login_post(login_data: LoginRequest):
     user = authenticate_user(login_data.username)
     if not user:
         raise HTTPException(status_code=401, detail="Incorrect LRN")
-    
     test_value = user.get("test")
     userId_value = str(user.get("_id"))
-
     return {"access_token": user['username'], "token_type": "bearer", "test": test_value, "userId": userId_value}
 
 @router.post("/users/{userId}/pretest", response_model=User)
@@ -99,16 +87,6 @@ async def toggle_user_status(userId: str):
     else:
         raise HTTPException(status_code=404, detail="User not found")
 
-
-# @router.delete("/users/{userId}")
-# async def delete_user(userId: str):
-#     object_id = ObjectId(userId)
-#     deletion_result = users_collection.delete_one({"_id": object_id})
-#     if deletion_result.deleted_count == 1:
-#         return {"message": "User deleted successfully"}
-#     else:
-#         raise HTTPException(status_code=404, detail="User not found")
-    
 # PUT
 @router.put("/users/{userId}")
 async def update_user(userId: str, updated_user_data: User):
@@ -118,5 +96,18 @@ async def update_user(userId: str, updated_user_data: User):
         updated_user_dict = updated_user_data.model_dump(exclude_unset=True)
         users_collection.update_one({"_id": object_id}, {"$set": updated_user_dict})
         return {"message": "User updated successfully"}
+    else:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    from bson import ObjectId
+from fastapi import HTTPException
+
+@router.put("/users/test=1/{userId}")
+async def update_user_pretest_status(userId: str):
+    object_id = ObjectId(userId)
+    user_exist = users_collection.find_one({"_id": object_id})
+    if user_exist:
+        users_collection.update_one({"_id": object_id}, {"$set": {"test": "1"}})
+        return {"message": "Test field updated successfully"}
     else:
         raise HTTPException(status_code=404, detail="User not found")

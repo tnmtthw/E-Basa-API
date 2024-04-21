@@ -58,6 +58,20 @@ async def get_pretest():
         pretest_list.append(pretest)
     return pretest_list
 
+# @router.get("/question/pretest", response_model=List[Pretest])
+# async def get_pretest():
+#     pretest_list = []
+#     try:
+#         # Assuming pretest_collection is your MongoDB collection object
+#         for pretest in pretest_collection.find({"category": "ponolohiya"}):
+#             pretest['_id'] = str(pretest['_id'])
+#             pretest['pretest_id'] = pretest.pop('_id')
+#             pretest_list.append(pretest)
+#     except Exception as e:
+#         # Handle exceptions such as connection errors or invalid queries
+#         raise HTTPException(status_code=500, detail=str(e))
+#     return pretest_list
+
 
 @router.get("/question/pretest/{id}", response_model=Pretest)
 async def get_user(id: str):

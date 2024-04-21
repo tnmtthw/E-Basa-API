@@ -9,7 +9,7 @@ class User(BaseModel):
     userId: Optional[str] = None
     status: str
     userType: str
-    test: int
+    test: str
     avatar: str
     firstName: str
     lastName: str
