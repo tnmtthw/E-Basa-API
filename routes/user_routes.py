@@ -29,7 +29,8 @@ def login_post(login_data: LoginRequest):
         raise HTTPException(status_code=401, detail="Incorrect LRN")
     test_value = user.get("test")
     userId_value = str(user.get("_id"))
-    return {"access_token": user['username'], "token_type": "bearer", "test": test_value, "userId": userId_value}
+    email_value = str(user.get("email"))
+    return {"access_token": user['username'], "token_type": "bearer", "test": test_value, "userId": userId_value, "email": email_value}
 
 @router.post("/users/{userId}/pretest", response_model=User)
 async def add_pretest_result(userId: str, result: Result):
