@@ -28,8 +28,7 @@ def login_teacher_post(login_data: LoginRequest):
         raise HTTPException(status_code=401, detail="Incorrect username or password")
     
     teacherObjectId_value = str(teacher.get("_id"))
-
-    return {"accessToken": teacher['username'], "firstName:": teacher['firstName'], "middleName": teacher['middleName'], "lastName": teacher['lastName'], "teacherObjectId": teacherObjectId_value}
+    return {"accessToken": teacher['username'], "avatar": teacher['avatar'], "firstName": teacher['firstName'], "middleName": teacher['middleName'], "lastName": teacher['lastName'], "teacherObjectId": teacherObjectId_value}
 
 #GET
 @router.get("/getTeacherAccount", response_model=List[Teacher])
