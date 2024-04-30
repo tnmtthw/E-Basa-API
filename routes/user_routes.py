@@ -54,6 +54,11 @@ async def get_users():
         users.append(user)
     return users
 
+@router.get("/usersCount")
+async def count_users():
+    total_users = users_collection.count_documents({})
+    return {"total_students": total_users}
+
 @router.get("/users/{id}", response_model=User)
 async def get_user(id: str):
     object_id = ObjectId(id)

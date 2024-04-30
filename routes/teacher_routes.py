@@ -40,6 +40,11 @@ async def get_teacher_list():
         teachers.append(teacher)
     return teachers
 
+@router.get("/getTeachersCount")
+async def count_users():
+    total_users = teachers_collection.count_documents({})
+    return {"total_teachers": total_users}
+
 
 @router.get("/getTeacherAccount/{id}", response_model=Teacher)
 async def get_teacher(id: str):
