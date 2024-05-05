@@ -37,6 +37,12 @@ async def get_classroom(id: str):
         classroom['students'] = [str(student_id) for student_id in classroom['students']]
         classrooms.append(classroom)
     return classrooms
+
+@router.get("/classroomsCount/{id}")
+async def count_classrooms(id: str):
+    object_id = ObjectId(id)
+    total_classrooms = classrooms_collection.count_documents({"teacherObjectId": object_id})
+    return {"total_classrooms": total_classrooms}
     
 # POST
 @router.post("/updateClassroomStudentList/{id}")
