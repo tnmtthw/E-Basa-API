@@ -7,28 +7,28 @@ class Result(BaseModel):
     
 class User(BaseModel):
     userId: Optional[str] = None
-    status: str
-    userType: str
-    test: str
-    avatar: str
-    firstName: str
-    lastName: str
-    middleName: str
-    username: str
-    gender: str
-    birthdate: str
-    houseNumber: str
-    street: str
-    sps: str
-    barangay: str
-    municipality: str
-    fatherName: str
-    fatherNumber: str
-    motherName: str
-    motherNumber: str
-    guardianName: str
-    guardianNumber: str
-    email: str
+    status: Optional[str] = None
+    userType: Optional[str] = None
+    test: Optional[str] = None
+    avatar: Optional[str] = None
+    firstName: Optional[str] = None
+    lastName: Optional[str] = None
+    middleName: Optional[str] = None
+    username: Optional[str] = None
+    gender: Optional[str] = None
+    birthdate: Optional[str] = None
+    houseNumber: Optional[str] = None
+    street: Optional[str] = None
+    sps: Optional[str] = None
+    barangay: Optional[str] = None
+    municipality: Optional[str] = None
+    fatherName: Optional[str] = None
+    fatherNumber: Optional[str] = None
+    motherName: Optional[str] = None
+    motherNumber: Optional[str] = None
+    guardianName: Optional[str] = None
+    guardianNumber: Optional[str] = None
+    email: Optional[str] = None
     pretest_results: List[Result] = []
     posttest_results: List[Result] = []
 

@@ -1,11 +1,13 @@
 from pymongo import MongoClient
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, File, UploadFile
 from fastapi.security import OAuth2PasswordBearer
 from models.user import Result, User, LoginRequest
 from database.connection import users_collection, authenticate_user
 from bson import ObjectId
 from fastapi.responses import JSONResponse
 from typing import List
+import pandas as pd
+from io import BytesIO
 
 router = APIRouter()
 
@@ -21,6 +23,25 @@ def register_post(user: User):
     user_data = user.dict()
     users_collection.insert_one(user_data)
     return {"username": user.username, "userType": user.userType}
+
+@router.post("/importRegister")
+async def upload_excel(file: UploadFile = File(...)):
+    try:
+        contents = await file.read()
+        df = pd.read_excel(BytesIO(contents))
+        
+        # Convert all columns to strings
+        df = df.astype(str)
+        
+        # Convert DataFrame to a list of dictionaries
+        data = df.to_dict(orient="records")
+        
+        # Assuming users_collection is defined elsewhere
+        users_collection.insert_many(data)
+        
+        return JSONResponse(content={"message": "Data imported successfully"})
+    except Exception as e:
+        return JSONResponse(content={"message": str(e)}, status_code=500)
 
 @router.post("/login")
 def login_post(login_data: LoginRequest):
