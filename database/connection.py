@@ -8,7 +8,9 @@ users_collection = client['users']['student']
 teachers_collection = client['users']['teacher']
 classrooms_collection = client['users']['classroom']
 pretest_collection = client['question']['pretest_40Q']
-instruction_collection = client['instruction']['pretest']
+posttest_collection = client['question']['post-test_40Q']
+instruction_pre_collection = client['instruction']['pretest']
+instruction_post_collection = client['instruction']['posttest']
 
 
 def authenticate_user(username):
